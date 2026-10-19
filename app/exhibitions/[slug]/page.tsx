@@ -364,143 +364,80 @@ export default async function ExhibitionDetailPage({ params }: Props) {
               </p>
             )}
 
-            {/* 3. Curatorial Story & Exhibition Details (Two-Column Layout) */}
-            <div className="mt-14 sm:mt-18 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
-              {/* Main Column (8 Cols): Overview, Essay, Highlights */}
-              <div className="lg:col-span-8 space-y-12 sm:space-y-16">
-                {/* Section A: Description / Overview */}
-                {exhibition.description && (
-                  <section className="space-y-5">
-                    <h2 className="font-heading text-[26px] sm:text-[30px] font-medium text-heading tracking-[-0.01em] pb-3 border-b border-border-subtle">
-                      {!exhibition.descriptionHeading ||
-                      exhibition.descriptionHeading.trim().toLowerCase() === "short description"
-                        ? "About the Exhibition"
-                        : exhibition.descriptionHeading}
-                    </h2>
+            {/* 3. Curatorial Story & Exhibition Details (Full-width Layout) */}
+            <div className="mt-14 sm:mt-18 w-full max-w-none space-y-12 sm:space-y-16">
+              {/* Section A: Description / Overview */}
+              {exhibition.description && (
+                <section className="space-y-5">
+                  <h2 className="font-heading text-[26px] sm:text-[30px] font-medium text-heading tracking-[-0.01em] pb-3 border-b border-border-subtle">
+                    {!exhibition.descriptionHeading ||
+                    exhibition.descriptionHeading.trim().toLowerCase() === "short description"
+                      ? "About the Exhibition"
+                      : exhibition.descriptionHeading}
+                  </h2>
 
-                    <div className="text-[16px] sm:text-[17.5px] leading-[1.8] text-body whitespace-pre-line pt-1">
-                      {exhibition.description}
-                    </div>
-                  </section>
-                )}
-
-                {/* Section B: Curatorial Essay & Historical Context */}
-                {exhibition.curatorialEssay && (
-                  <section className="space-y-6">
-                    <h2 className="font-heading text-[26px] sm:text-[30px] font-medium text-heading tracking-[-0.01em] pb-3 border-b border-border-subtle">
-                      {exhibition.curatorialEssayHeading || "Curatorial Narrative & Historical Context"}
-                    </h2>
-
-                    <div className="prose prose-stone max-w-none text-[15.5px] sm:text-[16.5px] leading-relaxed text-body">
-                      <BlockContentRenderer essay={exhibition.curatorialEssay} />
-                    </div>
-                  </section>
-                )}
-
-                {/* Section C: Artifact Highlights (if curated) */}
-                {exhibition.highlights && exhibition.highlights.length > 0 && (
-                  <section className="space-y-8">
-                    <h2 className="font-heading text-[26px] sm:text-[30px] font-medium text-heading tracking-[-0.01em] pb-3 border-b border-border-subtle">
-                      Featured Collection Highlights
-                    </h2>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      {exhibition.highlights.map((artifact) => (
-                        <div
-                          key={artifact.id}
-                          className="rounded-xs border border-border-subtle bg-surface p-4 shadow-xs flex flex-col"
-                        >
-                          <div className="relative aspect-4/3 w-full overflow-hidden rounded-xs border border-border-subtle bg-bg-secondary mb-3.5">
-                            <Image
-                              src={artifact.imageSrc}
-                              alt={artifact.imageAlt || artifact.title}
-                              fill
-                              sizes="(max-width: 640px) 100vw, 400px"
-                              className="object-cover"
-                            />
-                          </div>
-                          {artifact.accessionNumber && (
-                            <span className="text-[10.5px] font-mono uppercase tracking-widest text-palette-amber font-bold">
-                              {artifact.accessionNumber}
-                            </span>
-                          )}
-                          <h3 className="font-heading text-[18px] font-medium text-heading leading-snug mt-1">
-                            {artifact.title}
-                          </h3>
-                          <div className="mt-2 text-[12px] text-muted space-y-0.5">
-                            <p><strong>Origin:</strong> {artifact.provenance} ({artifact.date})</p>
-                            {artifact.material && <p><strong>Material:</strong> {artifact.material}</p>}
-                            {artifact.dimensions && <p><strong>Dimensions:</strong> {artifact.dimensions}</p>}
-                          </div>
-                          <p className="mt-3 text-[13.5px] leading-relaxed text-body pt-2 border-t border-border-subtle/80 flex-1">
-                            {artifact.description}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                )}
-              </div>
-
-              {/* Sidebar Column (4 Cols): Museum Info, Visit Hours, Share Card */}
-              <div className="lg:col-span-4 space-y-6">
-                {/* 1. Quick Share Box */}
-                <div className="rounded-xs border border-palette-amber/40 bg-palette-sand/20 p-6 shadow-xs">
-                  <div className="flex items-center gap-2.5 text-palette-amber mb-2">
-                    <Icon name="share" size={18} />
-                    <h3 className="font-heading text-[20px] font-semibold text-heading">
-                      Share this Exhibition
-                    </h3>
+                  <div className="text-[16px] sm:text-[17.5px] leading-[1.8] text-body whitespace-pre-line pt-1">
+                    {exhibition.description}
                   </div>
-                  <p className="text-[13px] leading-relaxed text-body mb-4">
-                    Send this exhibition directly to colleagues, students, or companions planning a visit to Leh.
-                  </p>
-                  <ShareButton
-                    data={shareData}
-                    variant="hero"
-                    className="w-full text-center"
-                    label="Share with Others"
-                  />
-                </div>
-              </div>
-            </div>
+                </section>
+              )}
 
-            {/* 4. Decorated "Share This Exhibition" Callout Banner */}
-            <div className="mt-16 rounded-xs border border-border-subtle bg-surface-dark text-white p-8 sm:p-10 shadow-lg relative overflow-hidden">
-              <div
-                className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-palette-amber/15 blur-3xl"
-                aria-hidden="true"
-              />
+              {/* Section B: Curatorial Essay & Historical Context */}
+              {exhibition.curatorialEssay && (
+                <section className="space-y-6">
+                  <h2 className="font-heading text-[26px] sm:text-[30px] font-medium text-heading tracking-[-0.01em] pb-3 border-b border-border-subtle">
+                    {exhibition.curatorialEssayHeading || "Curatorial Narrative & Historical Context"}
+                  </h2>
 
-              <div className="relative z-10 max-w-2xl">
-                <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-palette-sand">
-                  Spread Himalayan Heritage
-                </p>
-                <h3 className="font-heading text-[26px] sm:text-[32px] font-medium leading-snug mt-1 text-white">
-                  Share &ldquo;{exhibition.title}&rdquo; with others
-                </h3>
-                <p className="mt-2 text-[14.5px] text-palette-sand/90 leading-relaxed font-sans">
-                  Help preserve and illuminate the cultural tapestry of the Silk Route by sharing this exhibition with your community, students, and fellow travelers.
-                </p>
+                  <div className="prose prose-stone max-w-none text-[15.5px] sm:text-[16.5px] leading-relaxed text-body">
+                    <BlockContentRenderer essay={exhibition.curatorialEssay} />
+                  </div>
+                </section>
+              )}
 
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <ShareButton
-                    data={shareData}
-                    variant="outline"
-                    size="md"
-                    className="border-white! text-white! hover:bg-white! hover:text-surface-dark! h-11 sm:h-12"
-                    label="Open Sharing Options"
-                  />
-                  <Button
-                    href="/exhibitions"
-                    variant="secondary"
-                    size="md"
-                    className="h-11 sm:h-12"
-                  >
-                    View All Exhibitions
-                  </Button>
-                </div>
-              </div>
+              {/* Section C: Artifact Highlights (if curated) */}
+              {exhibition.highlights && exhibition.highlights.length > 0 && (
+                <section className="space-y-8">
+                  <h2 className="font-heading text-[26px] sm:text-[30px] font-medium text-heading tracking-[-0.01em] pb-3 border-b border-border-subtle">
+                    Featured Collection Highlights
+                  </h2>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    {exhibition.highlights.map((artifact) => (
+                      <div
+                        key={artifact.id}
+                        className="rounded-xs border border-border-subtle bg-surface p-4 shadow-xs flex flex-col"
+                      >
+                        <div className="relative aspect-4/3 w-full overflow-hidden rounded-xs border border-border-subtle bg-bg-secondary mb-3.5">
+                          <Image
+                            src={artifact.imageSrc}
+                            alt={artifact.imageAlt || artifact.title}
+                            fill
+                            sizes="(max-width: 640px) 100vw, 400px"
+                            className="object-cover"
+                          />
+                        </div>
+                        {artifact.accessionNumber && (
+                          <span className="text-[10.5px] font-mono uppercase tracking-widest text-palette-amber font-bold">
+                            {artifact.accessionNumber}
+                          </span>
+                        )}
+                        <h3 className="font-heading text-[18px] font-medium text-heading leading-snug mt-1">
+                          {artifact.title}
+                        </h3>
+                        <div className="mt-2 text-[12px] text-muted space-y-0.5">
+                          <p><strong>Origin:</strong> {artifact.provenance} ({artifact.date})</p>
+                          {artifact.material && <p><strong>Material:</strong> {artifact.material}</p>}
+                          {artifact.dimensions && <p><strong>Dimensions:</strong> {artifact.dimensions}</p>}
+                        </div>
+                        <p className="mt-3 text-[13.5px] leading-relaxed text-body pt-2 border-t border-border-subtle/80 flex-1">
+                          {artifact.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
             </div>
 
             {/* 5. Adjacent Exhibition Navigation */}

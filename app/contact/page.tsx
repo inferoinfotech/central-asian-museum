@@ -43,7 +43,7 @@ export default function ContactPage() {
           <Container>
             <div className="border border-palette-sand/80 rounded-xs bg-surface p-8 sm:p-10 md:p-12 shadow-sm">
               <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-12">
-                <div className="lg:col-span-8 lg:pr-12 lg:border-r lg:border-palette-sand/70">
+                <div className="lg:col-span-8 lg:pr-12 lg:border-r lg:border-palette-sand/70 flex flex-col">
                   <h2 className="font-heading text-[30px] font-medium text-heading md:text-[36px]">
                     Send an Enquiry
                   </h2>
@@ -78,7 +78,7 @@ export default function ContactPage() {
                         className="hover:text-heading underline underline-offset-2 transition-colors font-medium"
                         title="View Central Asian Museum on Google Maps"
                       >
-                        Tsas Soma, Main Market, Leh, Ladakh 194101
+                        Tsas Soma Garden, Main Market, Leh, Ladakh 194101
                       </a>
                     </p>
                   </div>
@@ -120,7 +120,7 @@ export default function ContactPage() {
                         </span>
                       </button>
                       <br />
-                      Winter: 10 am to 5 pm
+                      Winter: Closed
                     </p>
                   </div>
 
@@ -162,6 +162,10 @@ export default function ContactPage() {
                     <p className="text-[14px] leading-relaxed text-body">
                       <a className="hover:text-heading" href="tel:+919596919597">
                         +91 95969 19597
+                      </a>
+                      <br />
+                      <a className="hover:text-heading" href="tel:+919419176489">
+                        +91 94191 76489
                       </a>
                     </p>
                   </div>

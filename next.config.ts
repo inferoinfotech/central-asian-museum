@@ -15,6 +15,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/mock/complex",
+        destination: "/complex",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

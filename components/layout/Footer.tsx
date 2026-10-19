@@ -1,12 +1,24 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
 import { footerNavItems } from "@/lib/navigation";
+import { useHasExhibitions } from "@/lib/useHasExhibitions";
 
-export function Footer() {
+type FooterProps = {
+  hasExhibitions?: boolean;
+};
+
+export function Footer({ hasExhibitions: propHasExhibitions }: FooterProps = {}) {
+  const hasExhibitions = useHasExhibitions(propHasExhibitions);
+  const navItems = useMemo(() => {
+    if (hasExhibitions) return footerNavItems;
+    return footerNavItems.filter((item) => item.href !== "/exhibitions");
+  }, [hasExhibitions]);
+
   return (
     <footer className="site-footer border-t border-border bg-surface-dark text-light-text">
       <Container className="site-footer__inner pt-16 pb-12 md:pt-20 md:pb-16">
@@ -45,7 +57,7 @@ export function Footer() {
               Explore
             </p>
             <ul className="site-footer__links mt-5 space-y-3">
-              {footerNavItems.map((item) => (
+              {navItems.map((item) => (
                 <li key={item.href}>
                   <Link
                     className="inline-flex items-center text-[14px] text-white/75 transition-colors duration-200 hover:text-white"
@@ -98,7 +110,7 @@ export function Footer() {
                       </span>
                     </button>
                     <br />
-                    Winter: 10 am to 5 pm
+                    Winter: Closed
                   </p>
                 </div>
               </div>
@@ -118,7 +130,7 @@ export function Footer() {
                     className="text-[13px] text-white/60 hover:text-white transition-colors underline decoration-white/30 underline-offset-2 hover:decoration-white"
                     title="View Central Asian Museum on Google Maps"
                   >
-                    Tsas Soma, Main Market, Leh, Ladakh 194101
+                    Tsas Soma Garden, Main Market, Leh, Ladakh 194101
                   </a>
                 </div>
               </div>
@@ -149,9 +161,9 @@ export function Footer() {
 
         {/* Bottom Bar: Credit on left, Copyright on right */}
         <div className="site-footer__bottom mt-14 border-t border-white/10 pt-8 flex flex-col gap-4 text-[12px] text-white/50 sm:flex-row sm:items-center sm:justify-between">
-          <p data-credit className="order-1 sm:order-0">
+          <p data-credit className="order-1 sm:order-0 inline-flex items-center gap-[0.3em] flex-wrap">
             Powered by{" "}
-            <span className="snolep" tabIndex={0}>
+            <span className="snolep whitespace-nowrap" tabIndex={0}>
               Snolep Technologies
               <Image
                 src="/images/snolep.webp"

@@ -9,7 +9,7 @@ import { CategoryIndex } from "@/components/collections/CategoryIndex";
 import { collectionsFloors } from "@/lib/collectionsData";
 
 export const metadata: Metadata = {
-  title: "The Collection | Central Asian Museum, Leh",
+  title: "Collections | Central Asian Museum, Leh",
   description:
     "Objects that reflect the movement of people, materials, ideas and traditions across Ladakh and Central Asia, displayed across four floors.",
 };
@@ -143,10 +143,6 @@ export default function CollectionsPage() {
                             src={f.image}
                             style={{ position: "absolute", height: "100%", width: "100%", inset: 0 }}
                           />
-                        </div>
-                        <div className="relative mt-4 flex items-center justify-between text-[12px] text-muted">
-                          <span>{f.name}</span>
-                          <span className="text-palette-amber font-medium">{f.floor}</span>
                         </div>
                       </div>
                     </div>

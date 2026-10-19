@@ -1252,7 +1252,7 @@ mark.tbd {
   }
   .cat-index__head {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    align-items: end;
+    align-items: start;
     gap: 2.5rem;
   }
   .cat-index__body {
@@ -1691,6 +1691,174 @@ div.min-h-screen:has(form input[type="password"]) > .blur-3xl { display: none !i
   .lp-table td { border: 0; padding: 6px 14px; }
   .lp-actions { visibility: visible; }
 }
+
+/* ==========================================================================
+   V4 UPDATES & MUSEUM COMPLEX SPECIFICATIONS
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Museum Complex: Interactive Map & Place Explorer
+   -------------------------------------------------------------------------- */
+.cx-title { font-size: 32px; font-weight: 500; line-height: 1.12; letter-spacing: -0.01em; color: var(--museum-heading); outline: none; }
+@media (min-width: 768px) { .cx-title { font-size: 44px; } }
+@media (min-width: 1024px) { .cx-title { font-size: 52px; } }
+
+.cx-text > p { margin-top: 1.1rem; font-size: 15px; line-height: 1.75; color: var(--museum-body); }
+@media (min-width: 768px) { .cx-text > p { font-size: 16px; } }
+
+.cx-more { margin-top: 1.25rem; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--museum-accent); transition: color 0.2s ease; }
+.cx-more:hover { color: var(--museum-btn-hover); }
+.cx-more svg { transition: transform 0.25s ease; }
+.cx-more:hover svg { transform: translateX(4px); }
+
+.cx-main { margin: 0; }
+.cx-main img, .cx-main--empty { display: block; width: 100%; aspect-ratio: 3/2; object-fit: cover; border: 1px solid var(--museum-border); border-radius: 3px; }
+.cx-main--empty { display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(135deg, var(--museum-bg-secondary) 0 14px, var(--museum-bg) 14px 28px); }
+.cx-main figcaption { margin-top: 0.6rem; font-size: 12px; color: var(--museum-muted); }
+
+.cx-thumbs { margin-top: 1rem; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+.cx-thumb { display: flex; align-items: center; justify-content: center; aspect-ratio: 4/3; padding: 0; overflow: hidden; background: none; border: 1px solid var(--museum-border); border-radius: 3px; cursor: pointer; opacity: 0.7; transition: opacity 0.2s, border-color 0.2s; }
+.cx-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cx-thumb:hover, .cx-thumb.is-on { opacity: 1; }
+.cx-thumb.is-on { border-color: var(--museum-accent); box-shadow: 0 0 0 1px var(--museum-accent); }
+.cx-thumb:focus-visible { outline: 2px solid var(--museum-gold); outline-offset: 2px; }
+
+.cx-thumb--empty { cursor: default; opacity: 1; border-style: dashed; border-color: var(--museum-border-strong); background: var(--museum-bg-secondary); }
+.cx-thumb--empty > span, .cx-main--empty > span { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--museum-muted); text-align: center; padding: 0 0.5rem; }
+
+.cx-explore { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+@media (min-width: 1280px) { .cx-explore { grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 4rem; align-items: start; } }
+
+.cx-flow { display: flow-root; min-width: 0; }
+.cx-map-wrapper { position: relative; z-index: 1; margin-bottom: 2rem; }
+@media (min-width: 768px) { .cx-map-wrapper { float: left; width: 320px; margin: 0 3rem 1.5rem 0; } }
+@media (min-width: 1536px) { .cx-map-wrapper { width: 360px; } }
+
+.cx-map__stage { position: relative; width: 100%; max-width: 400px; margin: 0.8rem auto 0; aspect-ratio: 994/1140; overflow: hidden; background: var(--museum-bg-secondary); border: 1px solid var(--museum-border); border-radius: 3px; box-shadow: 0 10px 26px -18px rgba(38, 23, 28, 0.45); }
+.cx-map__stage svg { display: block; width: 100%; height: 100%; font-family: inherit; }
+
+.cx-area { fill: var(--c); fill-opacity: 0.44; stroke: #fff; stroke-opacity: 0.55; stroke-width: 4; stroke-linejoin: round; cursor: pointer; transition: fill-opacity 0.22s ease, stroke-opacity 0.22s ease, stroke-width 0.22s ease; }
+.cx-area.is-hot { fill-opacity: 0.7; stroke-opacity: 1; stroke-width: 6; }
+.cx-area.is-on { fill-opacity: 0.86; stroke-opacity: 1; stroke-width: 7; }
+.cx-map.has-hot .cx-area:not(.is-hot):not(.is-on) { fill-opacity: 0.3; stroke-opacity: 0.35; }
+
+.cx-area--ground, .cx-map.has-hot .cx-area--ground:not(.is-hot):not(.is-on) { stroke: none; fill-opacity: 0; }
+.cx-area--ground.is-hot { stroke: none; fill-opacity: 0.3; }
+.cx-area--ground.is-on { stroke: none; fill-opacity: 0.42; }
+
+.cx-pin { position: absolute; z-index: 1; transform: translate(-50%, -50%); padding: 0.2rem 0.5rem; white-space: nowrap; font-size: 12px; font-weight: 600; line-height: 1.25; color: #fff; background: var(--c); border: 1.5px solid rgba(255, 255, 255, 0.85); border-radius: 5px; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4); cursor: pointer; outline: none; transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease; }
+.cx-pin.is-hot { z-index: 2; transform: translate(-50%, -50%) scale(1.06); filter: brightness(1.14); }
+.cx-pin.is-on { z-index: 2; border-color: #fff; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.55), 0 2px 10px rgba(0, 0, 0, 0.5); }
+.cx-pin:focus-visible { outline: 2px solid var(--museum-gold); outline-offset: 2px; }
+
+.cx-cues text { fill: var(--museum-muted); }
+.cx-cues__north circle { fill: var(--museum-bg); stroke: var(--museum-accent); stroke-width: 2.5; }
+.cx-cues__north path, .cx-cues__north text { fill: var(--museum-accent); }
+.cx-cues__gate circle { fill: none; stroke: var(--museum-gold); stroke-width: 5; }
+.cx-cues__gate .cx-cues__dot { fill: var(--museum-gold); stroke: #fff; stroke-width: 3; }
+.cx-cues__gate text { fill: #8a4d12; }
+.cx-cues__pulse { transform-box: fill-box; transform-origin: center; animation: cx-gate 2.6s ease-out infinite; }
+@keyframes cx-gate { from { transform: scale(1); opacity: 0.9; } 70%, to { transform: scale(2); opacity: 0; } }
+
+.cx-anim { animation: cx-fade 0.3s ease both; }
+@keyframes cx-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Mobile Sticky Strip of Place Names */
+.cx-strip { display: none; }
+@media (max-width: 767.98px) {
+  .cx-strip { position: fixed; left: 0; right: 0; top: 60px; z-index: 45; display: flex; gap: 0.5rem; padding: 0.5rem 1rem; overflow-x: auto; scrollbar-width: none; background: var(--museum-bg); border-bottom: 1px solid var(--museum-border); box-shadow: 0 6px 14px -10px rgba(38, 23, 28, 0.5); opacity: 0; visibility: hidden; transform: translateY(-8px); transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s; }
+  .cx-strip.is-visible { opacity: 1; visibility: visible; transform: none; transition: opacity 0.2s ease, transform 0.2s ease; }
+  .cx-strip::-webkit-scrollbar { display: none; }
+  .cx-strip button { flex: none; display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.7rem; font-size: 13.5px; font-weight: 600; white-space: nowrap; color: var(--museum-heading); background: var(--museum-surface); border: 1px solid var(--museum-border-strong); border-radius: 999px; cursor: pointer; }
+  .cx-strip button i { width: 9px; height: 9px; border-radius: 50%; }
+  .cx-strip button.is-on { color: #fff; background: var(--c); border-color: var(--c); }
+  .cx-strip button.is-on i { background: #fff !important; }
+}
+
+@media (min-width: 768px) and (max-width: 1279.98px) {
+  .cx-side .cx-gallery { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 1rem; align-items: start; }
+  .cx-side .cx-thumbs { margin-top: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1280px) { .cx-side .cx-thumbs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* --------------------------------------------------------------------------
+   Header Transitions & Progress Bar
+   -------------------------------------------------------------------------- */
+header.sticky { transition: transform 0.26s ease, padding 0.28s ease; will-change: transform; }
+html[data-header-away] header.sticky { transform: translateY(calc(-100% - 8px)); }
+html[data-header-away] header.sticky:focus-within { transform: none; }
+
+html[data-ui-scrolled] header.sticky img { width: 2.75rem; }
+html[data-ui-scrolled] header.sticky > div:first-child { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+@media (min-width: 1024px) {
+  html[data-ui-scrolled] header.sticky img { width: 3.5rem; }
+}
+
+/* Header intermediate screen: 1024px to 1079.98px (prevents touching & wrapping between mobile breakpoint and 1080px) */
+@media (min-width: 1024px) and (max-width: 1079.98px) {
+  header .header-inner {
+    padding-left: 1.75rem !important;
+    padding-right: 1.75rem !important;
+    gap: 1.25rem !important;
+  }
+  header .header-logo {
+    width: 5.25rem !important;
+  }
+  header .header-nav {
+    gap: 1.25rem !important;
+  }
+  header .header-nav__link {
+    font-size: 14.5px !important;
+    letter-spacing: 0.1em !important;
+    white-space: nowrap !important;
+  }
+}
+
+.pg-bar { position: absolute; left: 0; right: 0; top: 100%; z-index: 1; height: 3px; overflow: hidden; pointer-events: none; background: #6f4c59; }
+.pg-bar > i { display: block; height: 100%; background: var(--museum-gold); transform: scaleX(0); transform-origin: 0 50%; transition: transform 0.1s linear; }
+.pg-bar--top { position: fixed; top: 0; z-index: 60; background: rgba(38, 23, 28, 0.22); }
+@media (max-width: 767.98px) { .pg-bar { height: 5px; } }
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) { .pg-bar { display: none; } }
+
+/* --------------------------------------------------------------------------
+   Cursor Ring with Scroll Arc (Desktop Pointer Fine)
+   -------------------------------------------------------------------------- */
+.cur-ring, .cur-prog { position: fixed; left: 0; top: 0; pointer-events: none; opacity: 0; will-change: translate; transition: opacity 0.3s ease, scale 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.cur-ring.is-on, .cur-prog.is-on { opacity: 1; }
+.cur-ring { z-index: 9998; width: 40px; height: 40px; margin: -20px 0 0 -20px; box-sizing: border-box; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, 0.9); box-shadow: 0 0 0 1px rgba(38, 23, 28, 0.3), inset 0 0 0 1px rgba(38, 23, 28, 0.3); }
+.cur-ring::after { content: ""; position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(38, 23, 28, 0.45); transition: opacity 0.2s ease; }
+.cur-prog { z-index: 9999; width: 44px; height: 44px; margin: -22px 0 0 -22px; rotate: -90deg; }
+.cur-prog svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 1px rgba(38, 23, 28, 0.55)); }
+.cur-prog circle { stroke: var(--museum-gold); stroke-width: 3px; transition: stroke-dashoffset 0.12s linear; }
+.cur-ring.is-link, .cur-prog.is-link { scale: 1.4; }
+.cur-ring.is-link { background: rgba(255, 255, 255, 0.14); }
+.cur-ring.is-link::after { opacity: 0; }
+.cur-ring.is-down, .cur-prog.is-down { scale: 0.88; }
+.cur-ring.is-link.is-down, .cur-prog.is-link.is-down { scale: 1.25; }
+.cur-ring.is-text.is-on, .cur-prog.is-text.is-on { opacity: 0; }
+@media (hover: none), (pointer: coarse) { .cur-ring, .cur-prog { display: none; } }
+
+/* --------------------------------------------------------------------------
+   UI Review: Designed 404 Missing Page
+   -------------------------------------------------------------------------- */
+.ui-404 { padding: clamp(3.5rem, 9vw, 7rem) 1.5rem; background: var(--museum-bg-secondary); border-bottom: 1px solid var(--museum-border-subtle); }
+.ui-404__in { max-width: 46rem; margin: 0 auto; text-align: center; }
+.ui-404 p, .ui-404 h1 { text-align: center; }
+.ui-404__code { font-size: 14px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--museum-gold); }
+.ui-404 h1 { margin-top: 1rem; font-size: clamp(38px, 6vw, 62px); font-weight: 500; line-height: 1.08; letter-spacing: -0.01em; color: var(--museum-heading); }
+.ui-404__lead { margin-top: 1.25rem; font-size: 17px; line-height: 1.65; color: var(--museum-body); }
+.ui-404__actions { margin-top: 2.25rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+.ui-404__btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1.75rem; font-size: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border-radius: 3px; transition: all 0.2s ease; }
+.ui-404__btn--main { background: var(--museum-btn-bg); color: #fff; }
+.ui-404__btn--main:hover { background: var(--museum-btn-hover); color: #fff; }
+.ui-404__btn--alt { color: var(--museum-heading); box-shadow: inset 0 0 0 1px var(--museum-border-strong); }
+.ui-404__btn--alt:hover { color: var(--museum-accent); box-shadow: inset 0 0 0 1px var(--museum-accent); background: var(--museum-bg); }
+.ui-404__more { margin-top: 3rem; padding-top: 1.75rem; border-top: 1px solid var(--museum-border); }
+.ui-404__more p { font-size: 14px; color: var(--museum-muted); }
+.ui-404__more ul { margin: 0.9rem 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1.75rem; }
+.ui-404__more a { font-size: 16px; color: var(--museum-heading); text-decoration: underline; text-decoration-color: var(--museum-border-strong); text-underline-offset: 4px; }
+.ui-404__more a:hover { color: var(--museum-accent); text-decoration-color: currentColor; }
+
 
 
 

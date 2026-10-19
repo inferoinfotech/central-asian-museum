@@ -18,6 +18,7 @@ const manrope = Manrope({
 });
 
 import { BackToTop } from "@/components/common/BackToTop";
+import { CursorRing } from "@/components/common/CursorRing";
 
 export const metadata: Metadata = {
   title: "Central Asian Museum",
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
         {children}
         <BackToTop />
+        <CursorRing />
       </body>
     </html>
   );

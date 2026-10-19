@@ -21,7 +21,7 @@ type HeroInfoBarProps = {
 export function HeroInfoBar({
   hoursTitle = "Museum Hours",
   locationTitle = "Museum Location",
-  locationDetail = "Tsas Soma Garden, Leh, Ladakh",
+  locationDetail = "Tsas Soma Garden, Main Market, Leh, Ladakh 194101",
   entryFeeTitle = "Entry Fees",
   contactLabel = "Contact Us",
   contactHref = "/contact",
@@ -71,11 +71,9 @@ export function HeroInfoBar({
                   <span
                     className={`hours-time__item ${activeSeason === "winter" ? "is-active" : ""}`}
                     data-season="winter"
+                    data-closed=""
                   >
-                    10 am to 5 pm{" "}
-                    <small className="ml-1 text-[12px] font-normal text-white/55">
-                      Winter
-                    </small>
+                    Closed
                   </span>
                 </div>
                 <div

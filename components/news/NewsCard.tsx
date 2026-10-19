@@ -35,15 +35,15 @@ export function NewsCard({ post, onOpen, className = "" }: NewsCardProps) {
           <h3 className="font-heading text-[22px] font-medium leading-[1.2] text-heading sm:text-[24px] group-hover:text-palette-amber transition-colors">
             {post.title}
           </h3>
-          <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-medium text-muted">
-            <div className="flex items-center gap-1.5">
+          <div className="mt-2.5 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[12px] font-medium text-muted">
+            <div className="flex items-center self-baseline gap-1.5">
               <Icon name="calendar" size={13} className="text-palette-sage" />
               <span>{post.date}</span>
             </div>
             {post.category && (
-              <span className="inline-flex items-center gap-2">
-                <span className="h-3 w-px bg-border-subtle" aria-hidden="true" />
-                <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-palette-amber">
+              <span className="inline-flex items-baseline gap-2">
+                <span className="h-3 w-px bg-border-subtle self-center" aria-hidden="true" />
+                <span className="font-mono text-[12px] font-semibold uppercase tracking-[0.12em] text-palette-amber">
                   {post.category}
                 </span>
               </span>

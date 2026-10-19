@@ -126,19 +126,23 @@ export default async function Home() {
     console.error("Failed to fetch lastly added news & events from DB:", error);
   }
 
+  const hasExhibitions = Boolean(exhibition);
+
   return (
     <div className="flex min-h-screen flex-col">
-      <Header variant="transparent" />
+      <Header variant="transparent" hasExhibitions={hasExhibitions} />
       <main className="flex-1">
         <Hero />
         <HeroInfoBar />
         <AboutSection />
         <FloorsSlider />
-        <CurrentExhibitionSection exhibition={exhibition} />
+        {hasExhibitions && exhibition && (
+          <CurrentExhibitionSection exhibition={exhibition} />
+        )}
         <NewsSection initialPosts={latestNewsPosts} />
         <SupportSection />
       </main>
-      <Footer />
+      <Footer hasExhibitions={hasExhibitions} />
     </div>
   );
 }

@@ -36,7 +36,7 @@ export default function AboutPage() {
           <Container className="relative z-10">
             <div>
               <h1 className="font-heading text-[38px] font-medium leading-[1.1] tracking-[-0.01em] text-heading sm:text-[48px] md:text-[58px] lg:text-[66px]">
-                A Museum at the Crossroads of Central Asia and Ladakh
+                From Caravan Ground to Museum
               </h1>
 
               <p className="mt-6 text-[16px] font-normal leading-relaxed text-body md:text-[18px]">
@@ -157,16 +157,7 @@ export default function AboutPage() {
                     className="portrait-full relative block w-full rounded-[3px] border border-border shadow-lg h-auto aspect-1023/1537 object-contain"
                   />
                   <figcaption className="relative mt-4 flex items-center justify-between text-[12px] text-muted">
-                    <span>The museum tower and stairway</span>
-                    <a
-                      href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-palette-amber font-medium hover:underline"
-                      title="View Tsas Soma Garden on Google Maps"
-                    >
-                      Tsas Soma Garden
-                    </a>
+                    <span>The Museum Tower and stairway</span>
                   </figcaption>
                 </figure>
               </div>

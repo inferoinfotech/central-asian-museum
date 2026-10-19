@@ -8,7 +8,7 @@ interface CurrentExhibitionSectionProps {
 }
 
 export function CurrentExhibitionSection({
-  exhibition = currentExhibitionData,
+  exhibition,
 }: CurrentExhibitionSectionProps) {
   if (!exhibition) return null;
 

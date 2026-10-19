@@ -1,8 +1,15 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Icon } from "@/components/ui/Icon";
+
+const MSG_HINTS: Record<string, string> = {
+  general: "How can we help? Ask about visiting, the collections or anything else.",
+  visits: "Tell us the size of the group, their age and the date you would like to visit.",
+  research: "Tell us about your research and what you would like to consult.",
+  donation: "Tell us how you would like to support the museum.",
+};
 
 export function ContactForm() {
   const searchParams = useSearchParams();
@@ -88,40 +95,54 @@ export function ContactForm() {
   }
 
   return (
-    <form className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2" onSubmit={handleSubmit}>
+    <form
+      className="mt-8 flex flex-col flex-1 gap-6 lg:justify-between"
+      onSubmit={handleSubmit}
+    >
       {error && (
-        <div className="sm:col-span-2 rounded-xs border border-red-200 bg-red-50 p-4 text-[14px] text-red-700">
+        <div className="rounded-xs border border-red-200 bg-red-50 p-4 text-[14px] text-red-700">
           {error}
         </div>
       )}
-      <div className="field">
-        <label htmlFor="f-name">Name</label>
-        <input
-          id="f-name"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+
+      {/* Row 1: Name and Email */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="field">
+          <label htmlFor="f-name">Name</label>
+          <input
+            id="f-name"
+            name="name"
+            placeholder="Your full name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="w-full placeholder:text-muted placeholder:opacity-75"
+          />
+        </div>
+        <div className="field">
+          <label htmlFor="f-email">Email</label>
+          <input
+            id="f-email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full placeholder:text-muted placeholder:opacity-75"
+          />
+        </div>
       </div>
+
+      {/* Row 2: Subject */}
       <div className="field">
-        <label htmlFor="f-email">Email</label>
-        <input
-          id="f-email"
-          name="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-      <div className="field sm:col-span-2">
         <label htmlFor="f-intent">Subject</label>
         <select
           id="f-intent"
           name="intent"
           value={intent}
           onChange={(e) => setIntent(e.target.value)}
+          className="w-full"
         >
           <option value="general">General enquiry</option>
           <option value="visits">Group, school or college visit</option>
@@ -129,17 +150,23 @@ export function ContactForm() {
           <option value="donation">Donation</option>
         </select>
       </div>
-      <div className="field sm:col-span-2">
+
+      {/* Row 3: Message — fills available height on desktop */}
+      <div className="field flex-1 flex flex-col">
         <label htmlFor="f-msg">Message</label>
         <textarea
           id="f-msg"
           name="message"
+          placeholder={MSG_HINTS[intent] || MSG_HINTS.general}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           required
+          className="w-full flex-1 min-h-36 resize-y placeholder:text-muted placeholder:opacity-75"
         />
       </div>
-      <div className="sm:col-span-2">
+
+      {/* Row 4: Submit button */}
+      <div>
         <button
           type="submit"
           disabled={isSubmitting}

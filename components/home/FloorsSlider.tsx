@@ -305,6 +305,80 @@ export function FloorsSlider({
     };
   }, [renderV2, calculateMobileActiveIndex]);
 
+  // V4-13: Mobile floors soft feathering loop tracking live slide transform
+  useEffect(() => {
+    const sec = mobileRef.current;
+    if (!sec) return;
+
+    const FEATHER = 220; // px, width of soft band at full strength
+    let raf = 0;
+    let onscreen = false;
+
+    const getSlides = () => sec.querySelectorAll<HTMLElement>(".floors__slide");
+
+    const sync = (s: HTMLElement) => {
+      const h = s.offsetHeight || window.innerHeight;
+      if (s.classList.contains("is-past")) {
+        s.style.setProperty("--pfeather", "0px");
+        return;
+      }
+      const transform = getComputedStyle(s).transform;
+      let ty = 0;
+      if (transform && transform !== "none") {
+        try {
+          ty = new DOMMatrixReadOnly(transform).m42;
+        } catch {
+          ty = 0;
+        }
+      }
+      const r = Math.max(0, Math.min(h, h - Math.abs(ty)));
+      s.style.setProperty(
+        "--pfeather",
+        `${Math.max(0, Math.min(FEATHER, 2 * r, 2 * (h - r))).toFixed(1)}px`
+      );
+    };
+
+    const frame = () => {
+      raf = 0;
+      getSlides().forEach(sync);
+      if (onscreen) {
+        raf = requestAnimationFrame(frame);
+      }
+    };
+
+    const start = () => {
+      if (!raf) raf = requestAnimationFrame(frame);
+    };
+
+    const stop = () => {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      getSlides().forEach((s) => s.style.setProperty("--pfeather", "0px"));
+    };
+
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver((entries) => {
+        onscreen = entries[0].isIntersecting;
+        if (onscreen) start();
+        else stop();
+      });
+      observer.observe(sec);
+    } else {
+      onscreen = true;
+      start();
+    }
+
+    getSlides().forEach(sync);
+
+    return () => {
+      stop();
+      if (observer) observer.disconnect();
+    };
+  }, []);
+
   // Navigate to floor on desktop
   const goToDesktop = (index: number) => {
     const root = flxRef.current;

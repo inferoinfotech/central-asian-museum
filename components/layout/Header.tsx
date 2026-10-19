@@ -102,6 +102,7 @@ export function Header({
   return (
     <header
       ref={headerRef}
+      data-menu-open={open ? "true" : "false"}
       className={`z-50 w-full transition-colors duration-300 ${
         isSolid
           ? "sticky top-0 bg-surface-dark text-white shadow-md"
@@ -109,7 +110,7 @@ export function Header({
       }`}
     >
       <div className={`pg-bar ${!isSolid ? "pg-bar--top" : ""}`} aria-hidden="true">
-        <i ref={fillRef} />
+        <i ref={fillRef} style={{ width: "100%" }} />
       </div>
       <div className="header-inner mx-auto flex max-w-360 items-center justify-between gap-6 px-6 py-4 md:px-10 lg:px-14 lg:py-5">
         <Link

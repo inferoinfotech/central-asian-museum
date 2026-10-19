@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { ComplexMap } from "@/components/complex/ComplexMap";
@@ -14,10 +15,17 @@ export function ComplexExplorer() {
   const [currentSlug, setCurrentSlug] = useState<string>("tower");
   const [activePhotoIndex, setActivePhotoIndex] = useState<number>(0);
   const [showMobileStrip, setShowMobileStrip] = useState<boolean>(false);
+  const [headerEl, setHeaderEl] = useState<HTMLElement | null>(null);
 
   const articleRef = useRef<HTMLDivElement>(null);
   const exploreRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
+
+  // Mount header reference for portal
+  useEffect(() => {
+    const el = document.querySelector("header");
+    if (el) setHeaderEl(el);
+  }, []);
 
   // Sync hash on mount and hashchange
   useEffect(() => {
@@ -55,6 +63,7 @@ export function ComplexExplorer() {
         exploreBottom > headerBottom + 140;
 
       setShowMobileStrip(shouldShow);
+      document.documentElement.toggleAttribute("data-cx-strip", shouldShow);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -64,6 +73,7 @@ export function ComplexExplorer() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
+      document.documentElement.removeAttribute("data-cx-strip");
     };
   }, []);
 
@@ -84,6 +94,13 @@ export function ComplexExplorer() {
 
       window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
     }
+
+    if (stripRef.current) {
+      const activeBtn = stripRef.current.querySelector<HTMLElement>(`[data-cx-slug="${slug}"]`);
+      if (activeBtn) {
+        stripRef.current.scrollTo({ left: Math.max(0, activeBtn.offsetLeft - 16), behavior: "smooth" });
+      }
+    }
   };
 
   const currentPlace: ComplexPlace =
@@ -94,30 +111,35 @@ export function ComplexExplorer() {
 
   return (
     <div>
-      {/* Mobile Sticky Place Strip under Header (V4-5) */}
-      <div
-        ref={stripRef}
-        className={`cx-strip ${showMobileStrip ? "is-visible" : ""}`}
-        role="group"
-        aria-label="Places in the complex"
-      >
-        {complexPlaces.map((pl) => {
-          const isOn = pl.slug === currentSlug;
-          return (
-            <button
-              key={pl.slug}
-              type="button"
-              className={isOn ? "is-on" : ""}
-              style={{ ["--c" as string]: pl.map.c }}
-              onClick={() => selectPlace(pl.slug, true)}
-              aria-pressed={isOn ? "true" : "false"}
-            >
-              <i style={{ backgroundColor: isOn ? "#fff" : pl.map.c }} />
-              <span>{pl.map.label}</span>
-            </button>
-          );
-        })}
-      </div>
+      {/* Mobile Sticky Place Strip portaled directly under Header (V4-5) */}
+      {headerEl &&
+        createPortal(
+          <div
+            ref={stripRef}
+            className={`cx-strip ${showMobileStrip ? "is-visible" : ""}`}
+            role="group"
+            aria-label="Places in the complex"
+          >
+            {complexPlaces.map((pl) => {
+              const isOn = pl.slug === currentSlug;
+              return (
+                <button
+                  key={pl.slug}
+                  type="button"
+                  data-cx-slug={pl.slug}
+                  className={isOn ? "is-on" : ""}
+                  style={{ ["--c" as string]: pl.map.c }}
+                  onClick={() => selectPlace(pl.slug, true)}
+                  aria-pressed={isOn ? "true" : "false"}
+                >
+                  <i style={{ backgroundColor: isOn ? "#fff" : pl.map.c }} />
+                  <span>{pl.map.label}</span>
+                </button>
+              );
+            })}
+          </div>,
+          headerEl
+        )}
 
       {/* Main Exploration Grid */}
       <div ref={exploreRef} className="cx-explore">

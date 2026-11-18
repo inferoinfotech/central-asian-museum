@@ -5,13 +5,13 @@ import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { NewsCard } from "@/components/news/NewsCard";
 import { NewsModal } from "@/components/news/NewsModal";
-import { newsData, type NewsPost } from "@/lib/newsData";
+import { newsData, parseEventDate, type NewsPost } from "@/lib/newsData";
 
 interface NewsExplorerProps {
   initialPosts?: NewsPost[];
 }
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 6;
 
 export function NewsExplorer({ initialPosts = newsData.posts }: NewsExplorerProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,8 +20,11 @@ export function NewsExplorer({ initialPosts = newsData.posts }: NewsExplorerProp
 
   const filteredPosts = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    if (!q) return initialPosts;
-    return initialPosts.filter((p) => {
+    const sorted = [...initialPosts].sort(
+      (a, b) => parseEventDate(b.date) - parseEventDate(a.date)
+    );
+    if (!q) return sorted;
+    return sorted.filter((p) => {
       const searchTarget = [
         p.title,
         p.excerpt,

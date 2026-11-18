@@ -22,9 +22,9 @@ export interface NewsSectionData {
 }
 
 export const newsData: NewsSectionData = {
-  eyebrow: "Lectures, Workshops & Updates",
+  eyebrow: "",
   heading: "Museum News & Events",
-  lead: "Milestones, programmes and events at the museum and around the Tsas Soma Garden.",
+  lead: "Milestones, programmes and events at the Central Asian Museum complex.",
   page_lead:
     "Milestones in the museum's story, and the programmes and events that bring the Tsas Soma Garden to life.",
   posts: [
@@ -126,3 +126,25 @@ export const newsData: NewsSectionData = {
     },
   ],
 };
+
+export function parseEventDate(dateStr?: string | null): number {
+  if (!dateStr) return 0;
+  const trimmed = dateStr.trim();
+  const parsed = Date.parse(trimmed);
+  if (!isNaN(parsed)) return parsed;
+
+  const parts = trimmed.match(/\d+/g);
+  if (parts && parts.length >= 3) {
+    if (parts[0].length === 4) {
+      return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])).getTime();
+    }
+    return new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0])).getTime();
+  }
+
+  const yearMatch = trimmed.match(/\b(19\d\d|20\d\d)\b/);
+  if (yearMatch) {
+    return new Date(Number(yearMatch[1]), 0, 1).getTime();
+  }
+
+  return 0;
+}

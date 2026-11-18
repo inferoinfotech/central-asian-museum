@@ -1,22 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { NewsCard } from "@/components/news/NewsCard";
 import { NewsModal } from "@/components/news/NewsModal";
-import { newsData, type NewsPost } from "@/lib/newsData";
+import { newsData, parseEventDate, type NewsPost } from "@/lib/newsData";
 
-export function NewsSection() {
+interface NewsSectionProps {
+  initialPosts?: NewsPost[];
+}
+
+export function NewsSection({ initialPosts }: NewsSectionProps = {}) {
   const [selectedPost, setSelectedPost] = useState<NewsPost | null>(null);
-  const latestPosts = newsData.posts.slice(0, 3);
+  const railRef = useRef<HTMLDivElement>(null);
+
+  // Show posts in proper sequence: latest date first, oldest last.
+  // If fewer than 3, fill remaining slots with archival posts so the grid remains balanced.
+  let displayPosts: NewsPost[] = [];
+  if (initialPosts && initialPosts.length > 0) {
+    displayPosts = [...initialPosts].sort(
+      (a, b) => parseEventDate(b.date) - parseEventDate(a.date)
+    );
+    if (displayPosts.length < 3) {
+      const existingIds = new Set(displayPosts.map((p) => p.id));
+      for (const p of newsData.posts) {
+        if (!existingIds.has(p.id) && displayPosts.length < 3) {
+          displayPosts.push(p);
+        }
+      }
+    }
+  } else {
+    displayPosts = [...newsData.posts]
+      .sort((a, b) => parseEventDate(b.date) - parseEventDate(a.date))
+      .slice(0, 3);
+  }
+
+  const latestPosts = displayPosts.slice(0, 3);
 
   return (
     <>
       <section
         id="news"
-        className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-20 sm:py-24 md:py-28 lg:py-32"
+        className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary pt-14 sm:pt-16 md:pt-18 lg:pt-20 pb-10 lg:pb-13"
       >
         <div
           aria-hidden="true"
@@ -30,7 +59,6 @@ export function NewsSection() {
         <Container className="relative z-10">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <SectionHeading
-              kicker={newsData.eyebrow}
               title={newsData.heading}
               description={newsData.lead}
             />
@@ -45,7 +73,10 @@ export function NewsSection() {
             </div>
           </div>
 
-          <div className="news-rail mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+          <div
+            ref={railRef}
+            className="news-rail mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10"
+          >
             {latestPosts.map((post) => (
               <NewsCard
                 key={post.id}
@@ -53,17 +84,16 @@ export function NewsSection() {
                 onOpen={(p) => setSelectedPost(p)}
               />
             ))}
-          </div>
-
-          <div className="mt-8 sm:hidden">
-            <Button
+            <Link
               href="/news-events"
-              variant="outline"
-              size="md"
-              className="w-full justify-center"
+              className="news-more"
             >
-              View All News &amp; Events
-            </Button>
+              <span className="news-more__icon">
+                <Icon name="arrow-right" size={22} />
+              </span>
+              <h3 className="news-more__title">View all news &amp; events</h3>
+              <p className="news-more__note">Milestones, programmes and events</p>
+            </Link>
           </div>
         </Container>
       </section>

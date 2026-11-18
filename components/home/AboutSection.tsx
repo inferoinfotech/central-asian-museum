@@ -50,8 +50,8 @@ export function AboutSection({
   buttonHref = "/about",
   imageSrc = "/images/tower-exterior-stairs.webp",
   imageAlt = "The museum's stone tower with its timber gallery and external stairway",
-  imageCaption = "The museum tower, Tsas Soma Garden",
-  imageTag = "Leh",
+  imageCaption = "The Museum Tower",
+  imageTag,
   highlights = defaultHighlights,
 }: AboutSectionProps) {
   return (

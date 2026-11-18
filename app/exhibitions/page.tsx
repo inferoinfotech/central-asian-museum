@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/ui/Container";
-import { Icon } from "@/components/ui/Icon";
 import { ExhibitionsExplorer } from "@/components/exhibitions/ExhibitionsExplorer";
-import { exhibitionsData } from "@/lib/exhibitionsData";
-
 import { prisma } from "@/lib/prisma";
 import type { ExhibitionItem } from "@/lib/exhibitionsData";
 
@@ -20,18 +16,41 @@ export const metadata: Metadata = {
 };
 
 export default async function ExhibitionsPage() {
-  let items: ExhibitionItem[] = exhibitionsData.items;
+  let items: ExhibitionItem[] = [];
 
   try {
     const dbExhibitions = await prisma.exhibition.findMany({
       orderBy: { createdAt: "desc" },
     });
 
-    if (dbExhibitions.length > 0) {
-      items = dbExhibitions.map((ex) => ({
+    items = dbExhibitions.map((ex, idx) => {
+      // Only the last/latest exhibition (idx === 0, same one featured on home page) gets Featured Exhibition
+      const isFeatured = idx === 0;
+
+      let statusLabel = "Past Exhibition";
+      if (isFeatured) {
+        statusLabel = "Featured Exhibition";
+      } else if (ex.status === "Upcoming") {
+        statusLabel = "Upcoming Exhibition";
+      } else if (ex.status === "Special") {
+        statusLabel = "Special Exhibition";
+      } else if (ex.status === "Permanent") {
+        statusLabel = "Permanent Collection";
+      } else if (
+        ex.badgeLabel &&
+        !ex.badgeLabel.toLowerCase().includes("featured") &&
+        !ex.badgeLabel.toLowerCase().includes("now on") &&
+        !ex.badgeLabel.toLowerCase().includes("current")
+      ) {
+        statusLabel = ex.badgeLabel;
+      } else {
+        statusLabel = "Past Exhibition";
+      }
+
+      return {
         id: ex.id,
         slug: ex.slug,
-        status: ex.badgeLabel || (ex.status === "Current" ? "Now on" : "Past exhibition"),
+        status: statusLabel,
         title: ex.title,
         dates: ex.dateRange,
         where: ex.location,
@@ -40,9 +59,9 @@ export default async function ExhibitionsPage() {
         alt: ex.imageAlt || ex.title,
         excerpt: ex.subtitle || ex.description.slice(0, 140) + "...",
         body: [ex.description, ex.curatorialEssay].filter(Boolean),
-        now: ex.status === "Current" || (ex.badgeLabel ? ex.badgeLabel.toLowerCase().includes("current") || ex.badgeLabel.toLowerCase().includes("now on") : false),
-      }));
-    }
+        now: isFeatured,
+      };
+    });
   } catch (error) {
     console.error("Failed to fetch exhibitions from DB:", error);
   }
@@ -53,7 +72,7 @@ export default async function ExhibitionsPage() {
 
       <main className="flex-1">
         {/* Exhibitions Page Hero: no eyebrow */}
-        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-16 md:py-24">
+        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-12 sm:py-16 md:py-18 lg:py-20">
           <div
             className="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-palette-amber/15 blur-3xl"
             aria-hidden="true"
@@ -64,32 +83,20 @@ export default async function ExhibitionsPage() {
           />
 
           <Container className="relative z-10">
-            {/* Breadcrumb */}
-            <nav
-              className="mb-6 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-muted"
-              aria-label="Breadcrumb"
-            >
-              <Link href="/" className="hover:text-heading transition-colors">
-                Home
-              </Link>
-              <Icon name="chevron-right" size={12} className="text-palette-sage" />
-              <span className="text-heading font-medium">Exhibitions</span>
-            </nav>
-
-            <div className="max-w-200">
+            <div>
               <h1 className="font-heading text-[38px] font-medium leading-[1.1] tracking-[-0.01em] text-heading sm:text-[48px] md:text-[58px] lg:text-[66px]">
-                {exhibitionsData.heading}
+                Exhibitions
               </h1>
 
               <p className="mt-6 text-[16px] font-normal leading-relaxed text-body md:text-[18px]">
-                {exhibitionsData.page_lead}
+                Exhibitions held in the museum&apos;s gallery for temporary and changing exhibitions, on the top floor of the tower.
               </p>
             </div>
           </Container>
         </section>
 
         {/* Dynamic Exhibitions Listing Section */}
-        <section id="list" className="py-16 md:py-24">
+        <section id="list" className="pt-6 pb-14 sm:pb-16 md:pb-18 lg:pb-20">
           <Container>
             <ExhibitionsExplorer initialItems={items} />
           </Container>

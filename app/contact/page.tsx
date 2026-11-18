@@ -21,34 +21,13 @@ export default function ContactPage() {
 
       <main className="flex-1">
         {/* contact.hero */}
-        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-16 md:py-24">
+        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-12 sm:py-16 md:py-18 lg:py-20">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-24 top-0 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl"
           />
           <Container className="relative z-10">
-            <nav
-              aria-label="Breadcrumb"
-              className="mb-6 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-muted"
-            >
-              <Link href="/" className="hover:text-heading transition-colors">
-                Home
-              </Link>
-              <Icon
-                name="chevron-right"
-                size={12}
-                className="text-palette-sage"
-              />
-              <span className="text-heading font-medium">Contact</span>
-            </nav>
-
-            <div className="max-w-200">
-              <div className="mb-4 inline-flex items-center gap-3">
-                <span aria-hidden="true" className="h-px w-8 bg-primary" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary md:text-[12px]">
-                  Visit &amp; Contact
-                </p>
-              </div>
+            <div>
               <h1 className="font-heading text-[38px] font-medium leading-[1.1] tracking-[-0.01em] text-heading sm:text-[48px] md:text-[58px] lg:text-[66px]">
                 Plan Your Visit &amp; Get in Touch
               </h1>
@@ -60,11 +39,11 @@ export default function ContactPage() {
         </section>
 
         {/* contact.details */}
-        <section id="visit" className="scroll-mt-24 py-16 md:py-20">
+        <section id="visit" className="scroll-mt-24 py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="border border-palette-sand/80 rounded-xs bg-surface p-8 sm:p-10 md:p-12 shadow-sm">
               <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-12">
-                <div className="lg:col-span-8 lg:pr-12 lg:border-r lg:border-palette-sand/70">
+                <div className="lg:col-span-8 lg:pr-12 lg:border-r lg:border-palette-sand/70 flex flex-col">
                   <h2 className="font-heading text-[30px] font-medium text-heading md:text-[36px]">
                     Send an Enquiry
                   </h2>
@@ -99,7 +78,7 @@ export default function ContactPage() {
                         className="hover:text-heading underline underline-offset-2 transition-colors font-medium"
                         title="View Central Asian Museum on Google Maps"
                       >
-                        Tsas Soma, Main Market, Leh, Ladakh 194101
+                        Tsas Soma Garden, Main Market, Leh, Ladakh 194101
                       </a>
                     </p>
                   </div>
@@ -116,9 +95,32 @@ export default function ContactPage() {
                       </h3>
                     </div>
                     <p className="text-[14px] leading-relaxed text-body">
-                      Summer (May to October): 10 am to 6 pm
+                      Summer: 10 am to 6 pm
+                      <button
+                        type="button"
+                        className="hours-info"
+                        aria-label="Summer: May to October"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width={13}
+                          height={13}
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeLinecap="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="9.5" />
+                          <path d="M12 11v5.5" />
+                          <circle cx="12" cy="7.6" r="0.6" fill="currentColor" />
+                        </svg>
+                        <span className="hours-info__tip" role="tooltip">
+                          May to October
+                        </span>
+                      </button>
                       <br />
-                      Winter: 10 am to 5 pm
+                      Winter: Closed
                     </p>
                   </div>
 
@@ -146,7 +148,7 @@ export default function ContactPage() {
                     </ul>
                   </div>
 
-                  <div>
+                  <div className="pb-7 border-b border-palette-sand/70">
                     <div className="flex items-center gap-2.5 text-palette-amber mb-3">
                       <Icon
                         name="phone"
@@ -161,20 +163,59 @@ export default function ContactPage() {
                       <a className="hover:text-heading" href="tel:+919596919597">
                         +91 95969 19597
                       </a>
+                      <br />
+                      <a className="hover:text-heading" href="tel:+919419176489">
+                        +91 94191 76489
+                      </a>
                     </p>
                   </div>
 
-                  <p className="text-[13px] text-muted">
-                    Instagram:{" "}
-                    <a
-                      className="text-body underline hover:text-heading"
-                      href="https://www.instagram.com/centralasianmuseum_leh/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      @centralasianmuseum_leh
-                    </a>
-                  </p>
+                  <div className="pb-7 border-b border-palette-sand/70">
+                    <div className="flex items-center gap-2.5 text-palette-amber mb-3">
+                      <Icon
+                        name="mail"
+                        size={20}
+                        className="text-palette-amber shrink-0"
+                      />
+                      <h3 className="font-heading text-[20px] font-medium text-heading">
+                        Email
+                      </h3>
+                    </div>
+                    <p className="text-[14px] leading-relaxed text-body break-all">
+                      <a
+                        className="hover:text-heading underline underline-offset-2 transition-colors font-medium"
+                        href="mailto:centralasianmuseum26@gmail.com"
+                      >
+                        centralasianmuseum26@gmail.com
+                      </a>
+                    </p>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-2.5 text-palette-amber mb-3">
+                      <img
+                        src="/images/instagram.webp"
+                        alt=""
+                        width={20}
+                        height={20}
+                        aria-hidden="true"
+                        className="shrink-0"
+                      />
+                      <h3 className="font-heading text-[20px] font-medium text-heading">
+                        Instagram
+                      </h3>
+                    </div>
+                    <p className="text-[14px] leading-relaxed text-body">
+                      <a
+                        className="hover:text-heading underline underline-offset-2 transition-colors font-medium"
+                        href="https://www.instagram.com/centralasianmuseum_leh/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        @centralasianmuseum_leh
+                      </a>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -184,7 +225,7 @@ export default function ContactPage() {
         {/* contact.donate */}
         <section
           id="donate"
-          className="scroll-mt-24 border-t border-border-subtle bg-bg-secondary py-20 md:py-28"
+          className="scroll-mt-24 border-t border-border-subtle bg-bg-secondary py-14 sm:py-16 md:py-18 lg:py-20"
         >
           <Container>
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">

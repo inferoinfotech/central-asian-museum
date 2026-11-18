@@ -3,10 +3,10 @@
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { BlockContentEditor } from "@/components/admin/BlockContentEditor";
+import { CoverImageUpload } from "@/components/admin/CoverImageUpload";
 import { formatDateToDDMMYYYY } from "@/lib/exhibitions";
 
 type Props = {
@@ -20,7 +20,6 @@ export default function EditExhibitionPage({ params }: Props) {
   const [id, setId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [startDate, setStartDate] = useState("");
@@ -38,7 +37,7 @@ export default function EditExhibitionPage({ params }: Props) {
     badgeLabel: "",
     imageSrc: "",
     imageAlt: "",
-    descriptionHeading: "Short Description",
+    descriptionHeading: "About the Exhibition",
     description: "",
     curatorialEssayHeading: "Curatorial Narrative & Historical Context",
     curatorialEssay: "",
@@ -157,26 +156,38 @@ export default function EditExhibitionPage({ params }: Props) {
   return (
     <div className="p-6 sm:p-10 max-w-4xl mx-auto space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-palette-sand/70 pb-6">
-        <div>
-          <Link href="/admin/exhibitions" className="font-mono text-[11px] uppercase tracking-wider text-palette-amber font-bold hover:underline flex items-center gap-1 mb-1">
-            ← Back to Exhibitions
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-palette-sand/70 pb-6">
+        <div className="flex items-center gap-3.5">
+          <Link
+            href="/admin/exhibitions"
+            aria-label="Back to Exhibitions"
+            title="Back to Exhibitions Manager"
+            className="flex h-9.5 w-9.5 shrink-0 items-center justify-center rounded-xs border border-palette-sand/80 bg-white hover:bg-bg-secondary hover:border-palette-amber text-heading transition-colors shadow-2xs group cursor-pointer"
+          >
+            <Icon name="arrow-left" size={17} className="text-palette-amber group-hover:-translate-x-0.5 transition-transform" />
           </Link>
-          <h1 className="font-heading text-[32px] font-semibold text-heading">
-            Edit Exhibition Record
-          </h1>
+          <div>
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-palette-amber font-bold">
+              Curatorial CMS • Exhibitions
+            </span>
+            <h1 className="font-heading text-[32px] font-semibold text-heading mt-0.5">
+              Edit Exhibition Record
+            </h1>
+          </div>
         </div>
 
-        {formData.slug && (
-          <Link
-            href={`/exhibitions/${formData.slug}`}
-            target="_blank"
-            className="inline-flex items-center gap-2 text-[12px] font-mono uppercase tracking-wider text-palette-wine hover:underline"
-          >
-            <span>View Live Page</span>
-            <Icon name="external-link" size={14} />
-          </Link>
-        )}
+        <div className="flex items-center gap-3">
+          {formData.slug && (
+            <Link
+              href={`/exhibitions/${formData.slug}`}
+              target="_blank"
+              className="inline-flex items-center gap-2 rounded-xs border border-palette-sand/80 bg-white px-3.5 py-1.5 text-[11.5px] font-mono uppercase tracking-wider text-palette-wine hover:border-palette-amber hover:bg-bg-secondary transition-colors shadow-2xs font-semibold"
+            >
+              <span>View Live Page</span>
+              <Icon name="external-link" size={13} />
+            </Link>
+          )}
+        </div>
       </div>
 
       {error && (
@@ -285,117 +296,32 @@ export default function EditExhibitionPage({ params }: Props) {
           </div>
 
           {/* Cover Image Upload */}
-          <div className="sm:col-span-2 space-y-1.5">
-            <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-              Exhibition Cover Image *
-            </label>
+          <CoverImageUpload
+            label="Exhibition Cover Image"
+            required
+            value={formData.imageSrc}
+            onChange={(url) => setFormData((prev) => ({ ...prev, imageSrc: url }))}
+            className="sm:col-span-2"
+          />
 
-            {isUploadingImage ? (
-              <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-amber/70 rounded-xs bg-palette-amber/5 text-center">
-                <div className="h-6 w-6 border-2 border-palette-wine border-t-transparent rounded-full animate-spin mb-2" />
-                <span className="text-[13px] font-mono font-bold text-palette-wine uppercase tracking-wider">
-                  Processing & Uploading Image...
-                </span>
-                <span className="text-[11px] text-muted font-mono mt-1">Please wait while the image is being processed</span>
-              </div>
-            ) : formData.imageSrc ? (
-              <div className="flex items-center justify-between gap-4 p-3 rounded-xs border border-palette-sand/70 bg-bg-secondary">
-                <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xs border border-palette-sand">
-                  <Image
-                    src={formData.imageSrc}
-                    alt="Cover preview"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <label className="px-3 py-1.5 rounded-xs border border-palette-sand/80 bg-white hover:border-palette-amber text-[11px] font-mono font-bold uppercase tracking-wider text-heading cursor-pointer shrink-0">
-                  <span>Change</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={async (e) => {
-                      if (e.target.files?.[0]) {
-                        const file = e.target.files[0];
-                        const data = new FormData();
-                        data.append("file", file);
-                        setIsUploadingImage(true);
-                        try {
-                          const res = await fetch("/api/admin/upload", { method: "POST", body: data });
-                          const json = await res.json();
-                          if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
-                        } catch (err) {
-                          console.error(err);
-                        } finally {
-                          setIsUploadingImage(false);
-                          e.target.value = "";
-                        }
-                      }
-                    }}
-                    className="hidden"
-                  />
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, imageSrc: "" })}
-                  className="px-3 py-1.5 rounded-xs border border-red-400/60 bg-red-500/10 text-red-600 hover:bg-red-500/20 text-[11px] font-mono font-bold uppercase tracking-wider shrink-0 flex items-center gap-1"
-                >
-                  <Icon name="trash" size={13} />
-                  <span>Remove</span>
-                </button>
-                </div>
-              </div>
-            ) : (
-              <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-sand/80 rounded-xs bg-bg-secondary/50 hover:bg-bg-secondary hover:border-palette-amber cursor-pointer transition-colors text-center">
-                <Icon name="upload" size={24} className="text-palette-amber mb-2" />
-                <span className="text-[13px] font-mono font-bold text-heading uppercase tracking-wider">
-                  Upload Cover Image
-                </span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={async (e) => {
-                    if (e.target.files?.[0]) {
-                      const file = e.target.files[0];
-                      const data = new FormData();
-                      data.append("file", file);
-                      setIsUploadingImage(true);
-                      try {
-                        const res = await fetch("/api/admin/upload", { method: "POST", body: data });
-                        const json = await res.json();
-                        if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
-                      } catch (err) {
-                        console.error(err);
-                      } finally {
-                        setIsUploadingImage(false);
-                        e.target.value = "";
-                      }
-                    }
-                  }}
-                  className="hidden"
-                />
-              </label>
-            )}
-          </div>
-
-          {/* Short Description Section (Part of top section) */}
+          {/* Overview Section (Part of top section) */}
           <div className="sm:col-span-2 space-y-4 rounded-xs border border-palette-sand/70 bg-bg-secondary/30 p-5 mt-2">
             <div className="space-y-1.5">
               <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-                Short Description Section Header Text
+                Overview Section Header Text
               </label>
               <input
                 type="text"
                 value={formData.descriptionHeading}
                 onChange={(e) => setFormData({ ...formData, descriptionHeading: e.target.value })}
-                placeholder="Short Description"
+                placeholder="About the Exhibition"
                 className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
               />
             </div>
 
             <div className="space-y-1.5">
               <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-                Short Description (Card Summary) *
+                Exhibition Overview / Description (Card & Page Intro) *
               </label>
               <textarea
                 required

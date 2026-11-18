@@ -1,0 +1,30 @@
+services:
+  museum:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: central-asian-museum:latest
+    container_name: central-asian-museum
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    ports:
+      # Bound to localhost only (prevents public port collision with existing apps)
+      - "127.0.0.1:${APP_PORT:-3010}:3000"
+    networks:
+      - caddy_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  caddy_net:
+    name: ${CADDY_NETWORK:-caddy_network}
+    external: true
+

@@ -19,6 +19,7 @@ const manrope = Manrope({
 
 import { BackToTop } from "@/components/common/BackToTop";
 import { CursorRing } from "@/components/common/CursorRing";
+import { WinterNotice } from "@/components/common/WinterNotice";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://centralasianmuseum.org";
 
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <BackToTop />
         <CursorRing />
+        <WinterNotice />
       </body>
     </html>
   );
